@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Stopwatch</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      text-align: center;
+      margin-top: 100px;
+      background-color: #f0f0f0;
+    }
+    #display {
+      font-size: 48px;
+      margin-bottom: 20px;
+    }
+    button {
+      font-size: 18px;
+      margin: 5px;
+      padding: 10px 20px;
+      cursor: pointer;
+    }
+  </style>     
+</head>
+<body>   
+
+  <div id="display">00:00:00.000</div>
+  <button onclick="start()">Start</button>
+  <button onclick="stop()">Stop</button>
+  <button onclick="reset()">Reset</button>
+
+  <script>
+    let startTime, timerInterval, running = false;
+        
+    function start() {
+      if (!running) {
+        running = true;
+        startTime = Date.now();
+        timerInterval = setInterval(updateTime, 10); // update every 10ms
+      }
+    }
+
+    function stop() {
+      if (running) {
+        running = false;
+        clearInterval(timerInterval);
+      }
+    }
+
+    function reset() {
+      clearInterval(timerInterval);
+      running = false;
+      document.getElementById('display').textContent = "00:00:00.000";
+    }
+
+    function updateTime() {
+      let elapsed = Date.now() - startTime;
+
+      let hours = Math.floor(elapsed / 3600000);
+      let minutes = Math.floor((elapsed % 3600000) / 60000);
+      let seconds = Math.floor((elapsed % 60000) / 1000);
+      let milliseconds = elapsed % 1000;
+
+      document.getElementById('display').textContent =
+        `${pad(hours)}:${pad(minutes)}:${pad(seconds)}.${padMs(milliseconds)}`;
+    }
+
+    function pad(n) {
+      return n < 10 ? '0' + n : n;
+    }
+
+    function padMs(n) {
+      return n.toString().padStart(3, '0');
+    }
+  </script>
+
+</body>
+</html>
